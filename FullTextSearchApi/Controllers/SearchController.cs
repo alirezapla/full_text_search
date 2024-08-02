@@ -7,7 +7,7 @@ using FullTextSearchApi.Services;
 namespace FullTextSearchApi.Controllers;
 
 [ApiController]
-[Route("api/Search")]
+[Route("api/[controller]")]
 public class SearchController : ControllerBase
 {
     private readonly ILogger<SearchController> _logger;

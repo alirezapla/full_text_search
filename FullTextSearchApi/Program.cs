@@ -1,5 +1,7 @@
 using FullTextSearchApi.Data;
-using FullTextSearchApi.Data.Repositories;
+using FullTextSearchApi.Middlewares;
+using FullTextSearchApi.Repositories;
+using FullTextSearchApi.Repositories.Abstractions;
 using FullTextSearchApi.Services;
 using FullTextSearchApi.UnitOfWorks;
 using Microsoft.EntityFrameworkCore;
@@ -24,11 +26,14 @@ builder.Services.AddDbContext<SearchDbContext>(options =>
 builder.Services.AddScoped<IInvertedIndexRepository, InvertedIndexRepository>();
 builder.Services.AddScoped<IUnitOfwork, UnitOfwork>();
 builder.Services.AddScoped<IInvertedIndexService, InvertedIndexService>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 builder.Services.AddControllers();
 
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddProblemDetails();
 
 
 var app = builder.Build();
