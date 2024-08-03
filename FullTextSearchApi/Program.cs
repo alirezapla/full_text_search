@@ -25,7 +25,6 @@ builder.Host.UseSerilog();
 builder.Services.AddDbContext<SearchDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnection")));
 builder.Services.AddScoped<IInvertedIndexRepository, InvertedIndexRepository>();
-builder.Services.AddScoped<IUnitOfwork, UnitOfwork>();
 builder.Services.AddScoped<IInvertedIndexService, InvertedIndexService>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
