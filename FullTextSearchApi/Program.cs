@@ -4,7 +4,6 @@ using FullTextSearchApi.Repositories;
 using FullTextSearchApi.Repositories.Abstractions;
 using FullTextSearchApi.Services;
 using FullTextSearchApi.Services.Abstractions;
-using FullTextSearchApi.UnitOfWorks;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
