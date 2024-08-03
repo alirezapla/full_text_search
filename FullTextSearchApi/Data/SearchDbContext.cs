@@ -8,8 +8,12 @@ namespace FullTextSearchApi.Data;
 public class SearchDbContext : DbContext
 
 {
-    public SearchDbContext(DbContextOptions<SearchDbContext> options) : base(options)
+    private readonly IConfiguration _configuration;
+
+    public SearchDbContext(DbContextOptions<SearchDbContext> options,IConfiguration configuration) : base(options)
     {
+        _configuration = configuration;
+
     }
 
     public DbSet<InvertedIndex> InvertedIndex { get; set; }
@@ -17,21 +21,20 @@ public class SearchDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        builder.Seed();
+        builder.Seed(_configuration["DocumentsPath"]);
     }
 }
 
 public static class ModelBuilderExtensions
 {
-    private static readonly IConfiguration Configuration;
 
-    public static void Seed(this ModelBuilder modelBuilder)
+    public static void Seed(this ModelBuilder modelBuilder,string? documentsPath)
     {
         List<String> fileNames = new List<string>();
         var tokenizedDocuments = new List<String[]>();
         var uniqueTerms = new HashSet<String>();
 
-        string[] files = Directory.GetFiles(Configuration["documentsPath"]);
+        string[] files = Directory.GetFiles(documentsPath ?? throw new ArgumentNullException(nameof(documentsPath)));
         var documents = new List<String>();
         foreach (string file in files)
         {
