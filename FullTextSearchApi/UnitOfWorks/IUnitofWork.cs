@@ -2,7 +2,7 @@
 
 namespace FullTextSearchApi.UnitOfWorks;
 
-public interface IUnitOfwork : IDisposable
+public interface IUnitOfWork : IDisposable
 {
     DbContext Context { get; }
     public Task SaveChangesAsync();

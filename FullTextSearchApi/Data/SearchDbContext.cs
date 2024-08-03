@@ -5,14 +5,10 @@ using FullTextSearchApi.Models;
 
 namespace FullTextSearchApi.Data;
 
-public class SearchDbContext : DbContext
+public class SearchDbContext(DbContextOptions<SearchDbContext> options) : DbContext(options)
 
 {
-    public SearchDbContext(DbContextOptions<SearchDbContext> options) : base(options)
-    {
-    }
-
-    public DbSet<InvertedIndex> InvertedIndex { get; set; }
+    public DbSet<InvertedIndex> InvertedIndex { get; init; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -31,7 +27,7 @@ public static class ModelBuilderExtensions
         var tokenizedDocuments = new List<string[]>();
         var uniqueTerms = new HashSet<string>();
 
-        string[] files = Directory.GetFiles(Configuration["documentsPath"]);
+        string[] files = Directory.GetFiles(Configuration["DocumentsPath"] ?? throw new InvalidOperationException());
         var documents = new List<string>();
         foreach (string file in files)
         {
@@ -51,7 +47,6 @@ public static class ModelBuilderExtensions
             uniqueTerms.UnionWith(tokenizedDocument);
         }
 
-        var rnd = new Random();
         foreach (var uniqueTerm in uniqueTerms)
         {
             for (int docId = 1; docId < documents.Count; docId++)
@@ -62,7 +57,6 @@ public static class ModelBuilderExtensions
                         { Id = Guid.NewGuid().ToString(), DocumentId = fileNames[docId], Word = uniqueTerm });
                 }
             }
-
         }
     }
 }

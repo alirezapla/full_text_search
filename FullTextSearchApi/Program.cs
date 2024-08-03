@@ -1,11 +1,9 @@
 using FullTextSearchApi.Data;
-<<<<<<< HEAD
-=======
 using FullTextSearchApi.Middlewares;
->>>>>>> 0a4227ff90beb95245c56902a1da342eeb52e8f0
 using FullTextSearchApi.Repositories;
 using FullTextSearchApi.Repositories.Abstractions;
 using FullTextSearchApi.Services;
+using FullTextSearchApi.Services.Abstractions;
 using FullTextSearchApi.UnitOfWorks;
 using Microsoft.EntityFrameworkCore;
 using Serilog;

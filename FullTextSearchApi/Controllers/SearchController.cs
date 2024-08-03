@@ -1,23 +1,16 @@
-﻿using FullTextSearchApi.Models;
+﻿using FullTextSearchApi.Models.DTO;
+using FullTextSearchApi.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
-using FullTextSearchApi.Models.DTO;
-using FullTextSearchApi.Services;
-
 
 namespace FullTextSearchApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SearchController : ControllerBase
+public class SearchController(IInvertedIndexService service, ILogger<SearchController> logger)
+    : ControllerBase
 {
-    private readonly ILogger<SearchController> _logger;
-    private readonly IInvertedIndexService _service;
-
-    public SearchController(IInvertedIndexService service, ILogger<SearchController> logger)
-    {
-        _service = service ?? throw new ArgumentNullException(nameof(service));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
+    private readonly ILogger<SearchController> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    private readonly IInvertedIndexService _service = service ?? throw new ArgumentNullException(nameof(service));
 
     [HttpGet]
     public async Task<IActionResult> GetInvertedIndexAsync([FromQuery] string query)

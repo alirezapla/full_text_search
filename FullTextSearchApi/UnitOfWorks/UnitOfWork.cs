@@ -1,22 +1,17 @@
-﻿namespace FullTextSearchApi.UnitOfWorks;
-
+﻿using FullTextSearchApi.Data;
 using Microsoft.EntityFrameworkCore;
-using FullTextSearchApi.Data;
 
-public class UnitOfwork : IUnitOfwork
+namespace FullTextSearchApi.UnitOfWorks;
+
+public sealed class UnitOfWork(SearchDbContext context) : IUnitOfWork
 {
-    private readonly SearchDbContext _context;
     private bool _disposed = false;
 
-    public UnitOfwork(SearchDbContext context)
-    {
-        _context = context;
-    }
-    public DbContext Context => _context;
+    public DbContext Context => context;
 
     public async Task SaveChangesAsync()
     {
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
     }
 
     public void Dispose()
@@ -25,17 +20,15 @@ public class UnitOfwork : IUnitOfwork
         GC.SuppressFinalize(this);
     }
 
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
-        if (!_disposed)
+        if (_disposed) return;
+        if (disposing)
         {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-
-            _disposed = true;
+            context.Dispose();
         }
+
+        _disposed = true;
     }
     
     

@@ -1,29 +1,3 @@
-<<<<<<< HEAD
-﻿using FullTextSearchApi.DataAccessLayer.Abstractions;
-
-namespace FullTextSearchApi.DataAccessLayer;
-
-public abstract class BaseRepository<T>: IBaseRepository<T> where T : class
-{
-    public  Task GetAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Create(T entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Update(T entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Delete(T entity)
-    {
-        throw new NotImplementedException();
-=======
 using System.Linq.Expressions;
 using FullTextSearchApi.Data;
 using FullTextSearchApi.DataAccessLayer.Abstractions;
@@ -35,12 +9,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
     protected readonly SearchDbContext Context;
 
-    public BaseRepository(SearchDbContext context)
+    protected BaseRepository(SearchDbContext context)
     {
         Context = context;
     }
 
-    public async Task<T> GetByIdAsync(Guid id)
+    public async Task<T?> GetByIdAsync(Guid id)
     {
         return await Context.Set<T>().FindAsync(id) ?? throw new ArgumentException($"Entity {id} not found.");
     }
@@ -52,7 +26,8 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
     {
-        return await Queryable.Where(Context.Set<T>(), predicate).ToListAsync();
+        return await Context.Set<T>().Where(predicate).ToListAsync() ??
+               throw new ArgumentException($"Entity {predicate.Body} not found.");
     }
 
     public async void AddAsync(T entity)
@@ -77,6 +52,5 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         Context.Set<T>().RemoveRange(entities);
         await Context.SaveChangesAsync();
->>>>>>> 0a4227ff90beb95245c56902a1da342eeb52e8f0
     }
 }

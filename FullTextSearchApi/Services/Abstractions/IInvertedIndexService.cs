@@ -1,7 +1,4 @@
-﻿using FullTextSearchApi.Models;
-using Microsoft.AspNetCore.Mvc;
-
-namespace FullTextSearchApi.Services;
+﻿namespace FullTextSearchApi.Services.Abstractions;
 
 public interface IInvertedIndexService
 {
