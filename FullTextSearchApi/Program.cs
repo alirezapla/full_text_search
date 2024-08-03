@@ -1,7 +1,9 @@
 using FullTextSearchApi.Data;
-using FullTextSearchApi.Data.Repositories;
+using FullTextSearchApi.Middlewares;
+using FullTextSearchApi.Repositories;
+using FullTextSearchApi.Repositories.Abstractions;
 using FullTextSearchApi.Services;
-using FullTextSearchApi.UnitOfWorks;
+using FullTextSearchApi.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -22,13 +24,15 @@ builder.Host.UseSerilog();
 builder.Services.AddDbContext<SearchDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnection")));
 builder.Services.AddScoped<IInvertedIndexRepository, InvertedIndexRepository>();
-builder.Services.AddScoped<IUnitOfwork, UnitOfwork>();
 builder.Services.AddScoped<IInvertedIndexService, InvertedIndexService>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 builder.Services.AddControllers();
 
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddProblemDetails();
 
 
 var app = builder.Build();

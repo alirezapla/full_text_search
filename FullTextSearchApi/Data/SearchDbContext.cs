@@ -5,18 +5,13 @@ using FullTextSearchApi.Models;
 
 namespace FullTextSearchApi.Data;
 
-public class SearchDbContext : DbContext
+public class SearchDbContext(DbContextOptions<SearchDbContext> options, IConfiguration configuration)
+    : DbContext(options)
 
 {
-    private readonly IConfiguration _configuration;
+    private readonly IConfiguration _configuration = configuration;
 
-    public SearchDbContext(DbContextOptions<SearchDbContext> options,IConfiguration configuration) : base(options)
-    {
-        _configuration = configuration;
-
-    }
-
-    public DbSet<InvertedIndex> InvertedIndex { get; set; }
+    public DbSet<InvertedIndex> InvertedIndex { get; init; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -27,15 +22,14 @@ public class SearchDbContext : DbContext
 
 public static class ModelBuilderExtensions
 {
-
-    public static void Seed(this ModelBuilder modelBuilder,string? documentsPath)
+    public static void Seed(this ModelBuilder modelBuilder, string? documentsPath)
     {
-        List<String> fileNames = new List<string>();
-        var tokenizedDocuments = new List<String[]>();
-        var uniqueTerms = new HashSet<String>();
+        List<string> fileNames = new List<string>();
+        var tokenizedDocuments = new List<string[]>();
+        var uniqueTerms = new HashSet<string>();
 
         string[] files = Directory.GetFiles(documentsPath ?? throw new ArgumentNullException(nameof(documentsPath)));
-        var documents = new List<String>();
+        var documents = new List<string>();
         foreach (string file in files)
         {
             string content = File.ReadAllText(file);
@@ -54,7 +48,6 @@ public static class ModelBuilderExtensions
             uniqueTerms.UnionWith(tokenizedDocument);
         }
 
-        var rnd = new Random();
         foreach (var uniqueTerm in uniqueTerms)
         {
             for (int docId = 1; docId < documents.Count; docId++)
@@ -65,7 +58,6 @@ public static class ModelBuilderExtensions
                         { Id = Guid.NewGuid().ToString(), DocumentId = fileNames[docId], Word = uniqueTerm });
                 }
             }
-
         }
     }
 }
