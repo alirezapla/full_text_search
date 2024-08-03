@@ -5,29 +5,30 @@ using FullTextSearchApi.Models;
 
 namespace FullTextSearchApi.Data;
 
-public class SearchDbContext(DbContextOptions<SearchDbContext> options) : DbContext(options)
+public class SearchDbContext(DbContextOptions<SearchDbContext> options, IConfiguration configuration) : DbContext(options)
 
 {
+    private readonly IConfiguration _configuration = configuration;
+
     public DbSet<InvertedIndex> InvertedIndex { get; init; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        builder.Seed();
+        builder.Seed(_configuration["DocumentsPath"]);
     }
 }
 
 public static class ModelBuilderExtensions
 {
-    private static readonly IConfiguration Configuration;
 
-    public static void Seed(this ModelBuilder modelBuilder)
+    public static void Seed(this ModelBuilder modelBuilder,string? documentsPath)
     {
         List<string> fileNames = new List<string>();
         var tokenizedDocuments = new List<string[]>();
         var uniqueTerms = new HashSet<string>();
 
-        string[] files = Directory.GetFiles(Configuration["DocumentsPath"] ?? throw new InvalidOperationException());
+        string[] files = Directory.GetFiles(documentsPath ?? throw new InvalidOperationException());
         var documents = new List<string>();
         foreach (string file in files)
         {
