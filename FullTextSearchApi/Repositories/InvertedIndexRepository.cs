@@ -1,10 +1,19 @@
+<<<<<<< HEAD
 ﻿using FullTextSearchApi.Models;
 using FullTextSearchApi.Repositories.Abstractions;
 using FullTextSearchApi.UnitOfWorks;
+=======
+﻿using FullTextSearchApi.Data;
+using FullTextSearchApi.DataAccessLayer;
+using FullTextSearchApi.Models;
+using FullTextSearchApi.Repositories.Abstractions;
+using Microsoft.AspNetCore.Mvc;
+>>>>>>> 0a4227ff90beb95245c56902a1da342eeb52e8f0
 using Microsoft.EntityFrameworkCore;
 
 namespace FullTextSearchApi.Repositories;
 
+<<<<<<< HEAD
 public class InvertedIndexRepository : IInvertedIndexRepository
 {
     private readonly DbSet<InvertedIndex> _dbSet;
@@ -51,4 +60,32 @@ public class InvertedIndexRepository : IInvertedIndexRepository
         _dbSet.Remove(data);
         await _unitOfWork.SaveChangesAsync();
     }
+=======
+public class InvertedIndexRepository : BaseRepository<InvertedIndex>, IInvertedIndexRepository
+{
+    public InvertedIndexRepository(SearchDbContext context) : base(context)
+    {
+    }
+
+    public async Task<List<String>> Get(String query)
+    {
+        var data = await Context.InvertedIndex.Where(x => x.Word == query.ToUpper())
+            .Select(x => x.DocumentId)
+            .ToListAsync();
+        return data;
+    }
+
+    public async Task<List<String>> ConditionalGet(
+        HashSet<String> allWords, HashSet<String> anyWords, HashSet<String> excludeWords)
+    {
+        var query = Context.InvertedIndex
+            .Where(wd => allWords.Contains(wd.Word) || anyWords.Contains(wd.Word) || excludeWords.Contains(wd.Word))
+            .GroupBy(wd => wd.DocumentId)
+            .Where(g => (!allWords.Any() || allWords.All(word => g.Any(wd => wd.Word == word))) &&
+                        (!anyWords.Any() || g.Any(wd => anyWords.Contains(wd.Word))) &&
+                        (!excludeWords.Any() || !g.Any(wd => excludeWords.Contains(wd.Word))))
+            .Select(g => g.Key);
+        return await query.ToListAsync();
+    }
+>>>>>>> 0a4227ff90beb95245c56902a1da342eeb52e8f0
 }

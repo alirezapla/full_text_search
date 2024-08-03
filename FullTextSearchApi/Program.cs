@@ -1,4 +1,8 @@
 using FullTextSearchApi.Data;
+<<<<<<< HEAD
+=======
+using FullTextSearchApi.Middlewares;
+>>>>>>> 0a4227ff90beb95245c56902a1da342eeb52e8f0
 using FullTextSearchApi.Repositories;
 using FullTextSearchApi.Repositories.Abstractions;
 using FullTextSearchApi.Services;
@@ -25,11 +29,14 @@ builder.Services.AddDbContext<SearchDbContext>(options =>
 builder.Services.AddScoped<IInvertedIndexRepository, InvertedIndexRepository>();
 builder.Services.AddScoped<IUnitOfwork, UnitOfwork>();
 builder.Services.AddScoped<IInvertedIndexService, InvertedIndexService>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 builder.Services.AddControllers();
 
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddProblemDetails();
 
 
 var app = builder.Build();

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FullTextSearchApi.Data.EntityConfigs;
 
-public class InvertedIndexConfig : IEntityTypeConfiguration<InvertedIndex>
+public class  bInvertedIndexConfig : IEntityTypeConfiguration<InvertedIndex>
 {
     public void Configure(EntityTypeBuilder<InvertedIndex> builder)
     {
