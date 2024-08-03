@@ -4,20 +4,13 @@ using FullTextSearchApi.Models.DTO;
 
 namespace FullTextSearchApi.Middlewares;
 
-public class GlobalExceptionHandler : IExceptionHandler
+public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
-    private readonly ILogger<GlobalExceptionHandler> _logger;
-
-    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
-    {
-        _logger = logger;
-    }
-
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception,
         CancellationToken cancellationToken)
     {
-        _logger.LogError(
-            $"An error occurred while processing your request: {exception.Message}");
+        logger.LogError(
+            $"An error occurred while processing: {exception.Message}");
         var errorResponse = new ErrorResponse
         {
             Message = exception.Message
@@ -44,5 +37,4 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         return true;
     }
-    
 }
