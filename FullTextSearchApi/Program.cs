@@ -1,5 +1,6 @@
 using FullTextSearchApi.Data;
-using FullTextSearchApi.Data.Repositories;
+using FullTextSearchApi.Repositories;
+using FullTextSearchApi.Repositories.Abstractions;
 using FullTextSearchApi.Services;
 using FullTextSearchApi.UnitOfWorks;
 using Microsoft.EntityFrameworkCore;

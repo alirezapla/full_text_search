@@ -27,12 +27,12 @@ public static class ModelBuilderExtensions
 
     public static void Seed(this ModelBuilder modelBuilder)
     {
-        List<String> fileNames = new List<string>();
-        var tokenizedDocuments = new List<String[]>();
-        var uniqueTerms = new HashSet<String>();
+        List<string> fileNames = new List<string>();
+        var tokenizedDocuments = new List<string[]>();
+        var uniqueTerms = new HashSet<string>();
 
         string[] files = Directory.GetFiles(Configuration["documentsPath"]);
-        var documents = new List<String>();
+        var documents = new List<string>();
         foreach (string file in files)
         {
             string content = File.ReadAllText(file);

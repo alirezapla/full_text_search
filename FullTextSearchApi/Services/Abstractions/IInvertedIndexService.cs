@@ -5,6 +5,6 @@ namespace FullTextSearchApi.Services;
 
 public interface IInvertedIndexService
 {
-    Task<List<String>> Search(String query);
+    Task<List<string>> SearchAsync(string query);
 
 }
