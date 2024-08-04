@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FullTextSearchApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class SearchController(IInvertedIndexService service, ILogger<SearchController> logger)
     : ControllerBase
 {

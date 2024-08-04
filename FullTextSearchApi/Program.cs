@@ -36,6 +36,8 @@ builder.Services.AddProblemDetails();
 
 
 var app = builder.Build();
+app.UseMiddleware<GlobalRoutePrefixMiddleware>("/api/v1");
+app.UsePathBase(new PathString("/api/v1"));
 
 if (app.Environment.IsDevelopment())
 {
