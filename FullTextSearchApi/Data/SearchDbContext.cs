@@ -9,14 +9,12 @@ public class SearchDbContext(DbContextOptions<SearchDbContext> options, IConfigu
     : DbContext(options)
 
 {
-    private readonly IConfiguration _configuration = configuration;
-
     public DbSet<InvertedIndex> InvertedIndex { get; init; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        builder.Seed(_configuration["DocumentsPath"]);
+        builder.Seed(configuration["DocumentsPath"]);
     }
 }
 
